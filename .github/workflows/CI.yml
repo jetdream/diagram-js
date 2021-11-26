@@ -30,7 +30,7 @@ jobs:
       run: npm ci
     - name: Build
       env: 
-        TEST_BROWSERS: ChromeHeadless,PhantomJS
+        TEST_BROWSERS: ChromeHeadless
         COVERAGE: 1
       run: npm run all
     - name: Upload coverage
