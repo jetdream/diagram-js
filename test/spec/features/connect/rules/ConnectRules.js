@@ -1,34 +1,24 @@
-import inherits from 'inherits';
-
 import RuleProvider from 'lib/features/rules/RuleProvider';
 
 import {
   isFrameElement
 } from 'lib/util/Elements';
 
-export default function ConnectRules(eventBus) {
-  RuleProvider.call(this, eventBus);
-}
+export default class ConnectRules extends RuleProvider {
+  init() {
+    this.addRule('connection.create', function(context) {
+      var source = context.source,
+          target = context.target;
 
-ConnectRules.$inject = ['eventBus'];
+      if (isFrameElement(source) || isFrameElement(target)) {
+        return false;
+      }
 
-inherits(ConnectRules, RuleProvider);
+      if (source && target && source.parent === target.parent) {
+        return { type: 'test:Connection' };
+      }
 
-
-ConnectRules.prototype.init = function() {
-
-  this.addRule('connection.create', function(context) {
-    var source = context.source,
-        target = context.target;
-
-    if (isFrameElement(source) || isFrameElement(target)) {
       return false;
-    }
-
-    if (source && target && source.parent === target.parent) {
-      return { type: 'test:Connection' };
-    }
-
-    return false;
-  });
-};
+    });
+  }
+}

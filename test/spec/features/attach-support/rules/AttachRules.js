@@ -1,17 +1,14 @@
-import inherits from 'inherits';
-
 import RuleProvider from 'lib/features/rules/RuleProvider';
 
 import { forEach } from 'min-dash';
 
-export default function AttachRules(eventBus) {
-  RuleProvider.call(this, eventBus);
+export default class AttachRules extends RuleProvider {
+  constructor(eventBus) {
+    super(eventBus);
+  }
 }
 
 AttachRules.$inject = [ 'eventBus' ];
-
-inherits(AttachRules, RuleProvider);
-
 
 AttachRules.prototype.init = function() {
 

@@ -15,35 +15,23 @@ import replaceModule from 'lib/features/replace';
 import AutoResizeProvider from 'lib/features/auto-resize/AutoResizeProvider';
 import AutoResize from 'lib/features/auto-resize/AutoResize';
 
-import inherits from 'inherits';
-
 
 /**
  * Custom auto-resize provider.
  *
  * @param {EventBus} eventBus
  */
-function CustomAutoResizeProvider(eventBus) {
-  AutoResizeProvider.call(this, eventBus);
-
-  this.canResize = function(elements, target) {
+class CustomAutoResizeProvider extends AutoResizeProvider {
+  canResize(elements, target) {
     return target.id !== 'root';
-  };
+  }
 }
 
-inherits(CustomAutoResizeProvider, AutoResizeProvider);
-
-
-function CustomAutoResize(injector) {
-  injector.invoke(AutoResize, this);
-
-  this.getOffset = function(element) {
+class CustomAutoResize extends AutoResize {
+  getOffset(element) {
     return { top: 10, bottom: 10, left: 10, right: 10 };
-  };
+  }
 }
-
-inherits(CustomAutoResize, AutoResize);
-
 
 var customAutoResizeModule = {
   __init__: [ 'customAutoResizeProvider' ],

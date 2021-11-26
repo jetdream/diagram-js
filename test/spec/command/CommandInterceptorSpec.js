@@ -3,8 +3,6 @@ import {
   inject
 } from 'test/TestHelper';
 
-import inherits from 'inherits';
-
 import cmdModule from 'lib/command';
 
 import CommandInterceptor from 'lib/command/CommandInterceptor';
@@ -45,13 +43,7 @@ function PostCommand() {
 /**
  * A command interceptor used for testing
  */
-function TestInterceptor(eventBus) {
-  CommandInterceptor.call(this, eventBus);
-}
-
-TestInterceptor.$inject = [ 'eventBus' ];
-
-inherits(TestInterceptor, CommandInterceptor);
+class TestInterceptor extends CommandInterceptor {}
 
 
 describe('command/CommandInterceptor', function() {

@@ -1,5 +1,3 @@
-import inherits from 'inherits';
-
 import OrderingProvider from 'lib/features/ordering/OrderingProvider';
 
 import {
@@ -13,12 +11,8 @@ import {
  * (1) elements are ordered by a {level} property
  * (2) elements with {alwaysTopLevel} are always added to the root
  */
-export default function TestOrderingProvider(eventBus) {
-
-  OrderingProvider.call(this, eventBus);
-
-
-  this.getOrdering = function(element, newParent) {
+export default class TestOrderingProvider extends OrderingProvider {
+  getOrdering(element, newParent) {
 
     if (element.alwaysTopLevel) {
       while (newParent.parent) {
@@ -44,7 +38,5 @@ export default function TestOrderingProvider(eventBus) {
       index: insertIndex,
       parent: newParent
     };
-  };
+  }
 }
-
-inherits(TestOrderingProvider, OrderingProvider);
