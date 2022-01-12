@@ -41,6 +41,7 @@ describe('features/create - Create', function() {
       childShape,
       frameShape,
       ignoreShape,
+      hiddenShape,
       newShape,
       newShape2,
       newElements;
@@ -118,6 +119,14 @@ describe('features/create - Create', function() {
     });
 
     newElements.push(newShape3);
+
+    hiddenShape = elementFactory.createShape({
+      id: 'hiddenShape',
+      x: 1000, y: 100, width: 100, height: 100,
+      hidden: true
+    });
+
+    newElements.push(hiddenShape);
 
     newElements.push(elementFactory.createShape({
       id: 'newShape4',
@@ -399,6 +408,42 @@ describe('features/create - Create', function() {
       var context = dragging.context().data.context;
 
       expect(context.shape).to.equal(newShape2);
+    }));
+
+
+    it('should ignore hidden shaped when positioning', inject(function(create, dragging, elementRegistry) {
+
+      // given
+      var parentGfx = elementRegistry.getGraphics('parentShape');
+      var parentMid = getMid(parentShape);
+
+      // when
+      create.start(canvasEvent({ x: 0, y: 0 }), [newShape, hiddenShape]);
+
+      dragging.hover({ element: parentShape, gfx: parentGfx });
+
+      dragging.move(canvasEvent(parentMid));
+
+      dragging.end();
+
+      // then
+      var createdVisibleShape = elementRegistry.get('newShape');
+      var createdHiddenShape = elementRegistry.get('hiddenShape');
+
+      var expectedPosition = {
+        x: parentMid.x - (newShape.width / 2),
+        y: parentMid.y - (newShape.height / 2)
+      };
+
+      // visible shape should be centered on event
+      expect(createdVisibleShape).to.exist;
+      expect(createdVisibleShape.x).to.equal(expectedPosition.x);
+      expect(createdVisibleShape.y).to.equal(expectedPosition.y);
+
+      // hidden shape should be positioned relative to visible shape
+      expect(createdHiddenShape).to.exist;
+      expect(createdHiddenShape.x).to.equal(1225);
+      expect(createdHiddenShape.y).to.equal(275);
     }));
 
 
